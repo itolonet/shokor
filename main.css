@@ -1,0 +1,99 @@
+.main-wrap{
+    border: 2px solid blue;  
+    padding: 10px;
+    background-color: rgba(230, 230, 230, 0.7);      
+}
+body{
+    background-image: url('calcbg2.jpg') ;
+    background-size: contain;
+    background-repeat: repeat-y;
+    box-sizing: border-box;
+}
+.select{
+    margin: 0 auto;
+    padding: 30px 10px;
+    display: table;
+}
+#menu{
+    border-radius: 5px 30px;
+    padding: 15px;
+    font-size: x-large;
+    background-color: darkslategray;
+    color: white;
+}
+input{
+    margin: 8px; 
+    padding: 8px;    
+    border-radius: 5px;
+}
+label{
+    margin-top: 20px;
+}
+input[type=number], input[type=month]{
+    width: 90%;
+    display: block;
+}
+.output{
+    width:99%;
+    display: block;
+    margin: 10px 0;
+}
+footer{
+    width: 100%;
+    height: max-content;
+    background-color: lightseagreen;
+    text-align: center;
+}
+footer a{
+    font-size: 24px;
+}
+div{
+    /* border: solid gray 1px; */
+    margin: 3px;
+}
+.print{
+    display: inline-block;
+    width: 99%;
+    text-align: center;
+    color:green;
+    font-size: x-large;
+    font-weight: 100;
+    font-family:cursive;
+
+}
+
+#monthly_Panalty{
+    width: 99%;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+}
+#panalty_Info{
+    font-size: xx-large;
+    display: none;
+}
+
+
+@media (min-width: 720px ){
+    .input{
+        float: left;
+        width:49.9%;
+    }
+    .output{
+        width: 49.9%;
+        display: inline-block;
+        margin: 40px;
+    }
+    .main-wrap{
+        margin:15px
+    }
+    .wrap{
+        display: flex;  
+    } 
+    
+}

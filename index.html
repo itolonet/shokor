@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto'>
+	<link rel="stylesheet" 
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="main.css">
+	<script src="mian.js" type="text/javascript"></script>
+
+	<title>TAX Calculator</title>
+    
+</head>
+<body onload="setCurrentDate()">
+    <div class="main-wrap">
+
+        <header id="header"> 
+        </header>
+
+        <div class="select">
+            <select name="menu" id="menu" onclick="hideShow(this.value)">
+                <option value="1">Salary TAX</option>
+                <option value="2">BRT</option>
+                <option value="3">Rental Withholding</option>
+                <option value="4">Vendor</option>
+                <option value="5">Annual Income TR</option>
+            </select>
+        </div>
+
+        <div class="salary" id="salary_id" style="display: none;">
+            <h1>Wage (Salary) Tax</h1>
+            <p>Employers are required to withhold Wage Tax from the employees. 
+                The Tax Amount depends on the total monthly income of the employee. 
+                There is no tax on salaries below 5,000 AFN.
+            </p>
+
+            <div class="wrap">
+                <div class="input">
+                    <form action=""   method="post">
+                        <label for=""> Starting Month: </label><br> 
+                        <input type="month" id="date1">
+                        <span id="addDateSalary" style="display: none;"> 
+                            <label>Ending Month: </label> <br> 
+                            <input type="month" id="dateEnd1" >
+                        </span>
+                        <input type="checkbox" onclick="addEndDate()" name="" id="checkBOX1"> 
+                        <label for="checkBOX1">Do you want to add End Date? </label><br>
+                        <label for="">What's your total monthly income (salary)?</label> <br>
+                        <input type="number" onkeyup="calculateSalary()" name="" id="salaryInput">
+                    </form>
+                </div>
+                <script>
+                    function calculateSalary(){
+                        var salary = document.getElementById('salaryInput').value;
+						var tax = 0;
+						if (salary <= 5000){
+							document.getElementById('taxSalaryOutput').innerHTML = 
+							"Your total Salary Withholding Tax is: <br>" + tax.toLocaleString("en-US") + " AFN";   
+							document.getElementById('netSalaryOutput').innerHTML = 
+							"Your total Net Salary is: <br>" + salary.toLocaleString("en-US") + " AFN";   
+						}
+						else if (salary > 5000 && salary <= 12500){
+							tax = (salary - 5000) * 2/100;
+							salary = salary - tax;
+							document.getElementById('taxSalaryOutput').innerHTML = 
+							"Your total Salary Withholding Tax is: <br>" + tax.toLocaleString("en-US") + " AFN";   
+							document.getElementById('netSalaryOutput').innerHTML = 
+							"Your total Net Salary is: <br>" + salary.toLocaleString("en-US") + " AFN";   
+						}
+						else if (salary <= 100000 && salary > 12500){
+							tax = ((salary - 12500) * 10/100 )+ 150;
+							salary = salary - tax;
+							document.getElementById('taxSalaryOutput').innerHTML = 
+							"Your total Salary Withholding Tax is: <br>" + tax.toLocaleString("en-US") + " AFN";   
+							document.getElementById('netSalaryOutput').innerHTML = 
+							"Your total Net Salary is: <br> " + salary.toLocaleString("en-US") + " AFN";   
+						}
+						else if (salary > 100000){
+							tax = ((salary - 100000) * 20/100 ) + 8900;
+							salary = salary - tax;
+							document.getElementById('taxSalaryOutput').innerHTML = 
+							"Your total Salary Withholding Tax is: " + tax.toLocaleString("en-US") + " AFN";   
+							document.getElementById('netSalaryOutput').innerHTML = 
+							"Your total Net Salary is: " + salary.toLocaleString("en-US") + " AFN";   
+						}
+                    }
+                </script>
+                <div class="output" > 
+					<span id="taxSalaryOutput" class="print" ></span>
+					<span id="netSalaryOutput" class='print' ></span>
+				</div>
+            </div>
+
+        </div>
+
+        <div class="brt" id="brt_id" style="display: none;" > 
+            <h1>Business Receipt Tax (BRT) </h1>
+            <p> Please enter the total amount you have earned this quarter in sales. 
+				Businesses should pay 2%  (if sales are less than 750,000) 
+				5% (if sales are greater than 750,000)  of their total sales to the Afghan government every quarter.
+			</p>
+            
+            <div class="wrap">
+                <div class="input">
+                    <form action="post">
+                        <label for=""> Starting Month</label><br>
+                        <input type="month" name="" id="date2">
+                        <span id="addDateBrt" style="display: none;"> 
+                            <label>Ending Month: </label> <br> 
+                            <input type="month" id="dateEnd2" >
+                        </span>
+                        <input type="checkbox" onclick="addEndDate()" name="" id="checkBOX2">  
+                        <label for="checkBOX2"> Do you want to add End Date? </label><br>
+                        <label for="brt">How much was your total receivable for this quarter? *in AFN</label>
+                        <input type="number" onkeyup="calculateBrt()" id="inputBrt">
+                    </form>
+					
+					The following businesses are Exceptions:
+					<ul>
+						<li>Hotel services</li>
+						<li>Restaurant services</li>
+						<li>Telecommunications services</li>
+						<li>Airline services</li>
+						<li>Halls and clubs services as related to events</li>
+					</ul>
+                </div>
+				<script>
+					function calculateBrt(){
+						var sales  = document.getElementById('inputBrt').value;
+						var tax = 0;
+						if (sales < 750000){
+							tax = sales * 4/100;
+							document.getElementById("salesOutput").innerHTML = 
+							'Your total Business Receipt Tax for this quarter is: ' +'<br>'+ tax.toLocaleString("en-US") + ' AFN ';
+
+						}
+						else if (sales >= 750000){
+							tax = sales * 10/100;
+							document.getElementById("salesOutput").innerHTML = 
+							'Your total Business Receipt Tax for this quarter is: ' +'<br>'+ tax.toLocaleString("en-US") + ' AFN ';
+						}
+					}
+				</script>
+                <div class="output"><span id="salesOutput" class="print"></span></div>
+            </div>
+        </div>
+        
+        <div class="rent" id="rent_id" style="display: block;" >
+            <h1>Rental Tax</h1>
+            <p>  Are you paying or collecting rent? Here's how much you need to withhold as a rental tax. 
+                Please note that Rental Withholding Tax is payable to the government on a monthly basis.
+            </p>
+            <div class="wrap">
+                <div class="input">
+                    <form action="post">
+                        <label for=""> Starting Month</label><br>
+                        <input type="month" name="" id="date3" onchange="calucalateRent()">
+                        <span id="addDateRent" style="display: none;"> 
+                            <label>Ending Month: </label> <br> 
+                            <input type="month" id="dateEnd3" onchange="calucalateRent()" >
+                        </span>
+                        <input type="checkbox" onclick="addEndDate()" name="" id="checkBOX3"> 
+                        <label for="checkBOX3">Do you want to add End Date? </label><br>
+                        <label for="rent">How much are you paying/collecting in rent?</label><br>
+                        <input type="number"  id="rentInput" onkeyup="calucalateRent()" placeholder="Enter amount!">
+                    </form>
+                </div>
+				<script>
+					
+					const getDaysInMonth = date =>
+					new Date(date.getFullYear() , date.getMonth() + 1, 0).getDate();
+					
+					var iamkhan = false;
+					function show_Panalty_Details(){
+						if(iamkhan === false){
+							document.getElementById("monthly_Panalty").style.display = 'inline-block'; 
+							iamkhan =true;
+						}
+						else {
+							document.getElementById("monthly_Panalty").style.display = 'none'; 
+							iamkhan = false;
+						}
+					}
+
+					function calucalateRent(){
+						document.getElementById("monthly_Panalty").style.display = 'none'; 
+						document.getElementById('rentError').innerHTML = ' ';
+						document.getElementById('total_Revenue').innerHTML = ' ';
+						document.getElementById('regular_Monthly_Withhold').innerHTML = ' ';
+						document.getElementById('total_Tax_Dues').innerHTML = ' ';
+						document.getElementById('monthly_Panalty').innerHTML = ' ';
+						document.getElementById('total_Panalties').innerHTML = ' ';
+						document.getElementById('interest_Charges').innerHTML = ' ';
+						document.getElementById('total_Withhold').innerHTML = ' ';
+
+						let MonthsOfYear = [ '' ,'January', 'Febuary', 'March', 'April' , 'May', 'June',
+                        'July', 'August', 'September', 'October', 'Novemver', 'December'];
+
+						var rent = document.getElementById('rentInput').value;
+						let totalRevenue = 0;
+						let regularMonthlyWithhold = 0;
+						let totalTaxDues = 0;
+						let totalPanalties = 0 ;
+						let interestCharges = 0;
+						let totalWithhold = 0; 
+
+						var startMonth = document.getElementById('date3').value;
+						const arr = startMonth.split('-')
+						const thisMonth = parseInt(arr[1]);
+						const thisYear = parseInt(arr[0]);
+						var EndMonth = document.getElementById('dateEnd3').value;
+						const arr2 = EndMonth.split('-')
+						const currMonth = parseInt(arr2[1]);
+						const currYear = parseInt(arr2[0]);
+
+						let numberOfMonths = ((currMonth - thisMonth) + 1) + ((currYear - thisYear) * 12);
+
+						let dddd1 = new Date();  /////for Start date of calculations
+						let dddd2 = new Date();  /////for End date of calculations
+						dddd1.setDate(1);
+						dddd1.setMonth(thisMonth-1);
+						dddd1.setFullYear(thisYear);
+						dddd2.setMonth(currMonth-1);
+						dddd2.setFullYear(currYear);
+						var dddd3 = dddd1;     ////// to stop panalties in future dates 
+						var presentday = new Date();
+
+						if (rent <= 10000){
+							document.getElementById('regular_Monthly_Withhold').innerHTML =
+							'No Tax Applicable on This Amount !';
+						}
+						else if (currMonth == thisMonth && currYear == thisYear){
+							if (rent <= 100000 && rent > 10000 ){
+								regularMonthlyWithhold = rent * 10 /100;
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'You Should Withhold: '+'<br> ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+							}
+							else if (rent > 100000 ){
+								regularMonthlyWithhold = rent * 15/100;
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'You Should Withhold: '+'<br>  ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+							}
+						}
+						else if(dddd1>dddd2){
+							document.getElementById("rentError").innerHTML = "Error <br> NO Tenet";
+						}
+						else if(dddd1 > presentday && dddd2 > presentday){
+							if (rent <= 100000 && rent > 10000 ){
+								regularMonthlyWithhold = rent * 10 /100;
+								totalWithhold = regularMonthlyWithhold * numberOfMonths;
+								totalRevenue = rent * numberOfMonths;
+								document.getElementById('total_Revenue').innerHTML = 
+								'From '+ MonthsOfYear[thisMonth] + ' '+ thisYear+ ' Upto '+
+								MonthsOfYear[currMonth] +' '+ currYear + ' <br> ' +
+								'Total Renvenue: ' + totalRevenue.toLocaleString("en-US") + ' AFN ';
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'Regular Monthly Withholdings: '+'<br> ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+								document.getElementById("total_Withhold").innerHTML = 
+								'Total Withholdings: ' + totalWithhold.toLocaleString("en-US")+ ' AFN';
+							}
+							else if (rent > 100000 ){
+								regularMonthlyWithhold = rent * 15/100;
+								totalWithhold = regularMonthlyWithhold * numberOfMonths;
+								totalRevenue = rent * numberOfMonths;
+								document.getElementById('total_Revenue').innerHTML = 
+								'From '+ thisMonth + ' '+ thisYear+ ' Upto '+
+								currMonth +' '+ currYear + ' <br> ' +
+								'Total Renvenue: ' + totalRevenue.toLocaleString("en-US") + ' AFN ';
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'Regular Monthly Withholdings: '+'<br> ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+								document.getElementById("total_Withhold").innerHTML = 
+								'Total Withholdings: ' + totalWithhold.toLocaleString("en-US")+ ' AFN';
+							}
+						}
+						else if ((currMonth != thisMonth || currYear != thisYear) ){
+							var panaltyDays = ((dddd2 - dddd1)/(1000*60*60*24));
+							var monthlyPanalty = 0;
+							var mm = thisMonth;
+							var yyyy = thisYear;
+
+							for (var i = numberOfMonths ; i>1 ; i--){									
+								panaltyDays -= getDaysInMonth(new Date(yyyy, mm-1));
+								const monthlyPanaltyDays= [];
+								monthlyPanaltyDays[i] = panaltyDays;
+								monthlyPanalty = panaltyDays * 50;
+								totalPanalties += panaltyDays*50;
+								document.getElementById("monthly_Panalty").innerHTML += 
+								MonthsOfYear[mm] + ' '+ yyyy +': '+ monthlyPanalty + ' AFN '+ ' (' + 
+								monthlyPanaltyDays[i] + ' Days x 50 AFN)'+'<br>';
+								mm++; 
+								dddd3.setMonth(mm);
+								if(mm > 12){
+									mm = 1 ;
+									yyyy +=1
+									dddd3.setFullYear(yyyy);
+								}
+								if(dddd3 >= presentday){
+									break;
+								}
+							}
+							document.getElementById("header").innerHTML += "<br>" ;
+							if (rent <= 100000 && rent > 10000 ){
+								regularMonthlyWithhold = rent * 10/100;
+								totalTaxDues = (numberOfMonths * ( rent * 10/100));
+								totalWithhold = regularMonthlyWithhold + totalTaxDues + totalPanalties; 
+								totalRevenue = rent*numberOfMonths;
+
+								document.getElementById('total_Revenue').innerHTML = 
+								'From '+ MonthsOfYear[thisMonth] + ' '+ thisYear+ ' Upto '+
+								MonthsOfYear[currMonth] +' '+ currYear + ' <br> ' +
+								'Total Renvenue: ' + totalRevenue.toLocaleString("en-US") + ' AFN ';
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'Regular Monthly Withholdings: '+'<br> ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+								document.getElementById("total_Tax_Dues").innerHTML = 
+								'Total Tax Dues: ' + totalTaxDues.toLocaleString('en-US') + ' AFN';
+								document.getElementById("panalty_Info").style.display = 'inline-block';
+								document.getElementById("total_Panalties").innerHTML = 
+								'Total Panalties: ' + totalPanalties.toLocaleString('en-US') + ' AFN';
+								document.getElementById("total_Withhold").innerHTML = 
+								'Total Withholdings: ' + totalWithhold.toLocaleString("en-US") + ' AFN';
+							}
+							else if (rent > 100000 ){
+								regularMonthlyWithhold = rent * 15/100;
+								totalTaxDues = (numberOfMonths * ( rent * 10/100));
+								totalWithhold = regularMonthlyWithhold + totalTaxDues + totalPanalties; 
+								totalRevenue = rent*numberOfMonths;
+
+								document.getElementById("panalty_Info").style.display = 'inline-block';
+								document.getElementById('total_Revenue').innerHTML = 
+								'From '+ MonthsOfYear[thisMonth] + ' '+ thisYear+ ' Upto '+
+								MonthsOfYear[currMonth] +' '+ currYear + ' <br> ' +
+								'Total Renvenue: ' + totalRevenue.toLocaleString("en-US") + ' AFN ';
+								document.getElementById('regular_Monthly_Withhold').innerHTML =
+								'Regular Monthly Withholdings: '+'<br> ' + regularMonthlyWithhold.toLocaleString("en-US") + ' AFN ';
+								document.getElementById("total_Tax_Dues").innerHTML = 
+								'Total Tax Dues: ' + totalTaxDues.toLocaleString('en-US') + ' AFN';
+								document.getElementById("total_Panalties").innerHTML = 
+								'Total Panalties: ' + totalPanalties.toLocaleString('en-US') + ' AFN';
+								document.getElementById("total_Withhold").innerHTML = 
+								'Total Withholdings: ' + totalWithhold.toLocaleString("en-US") + ' AFN';
+							}
+						}		
+					}
+				</script>
+                <div class="output" id="rentOutputId">
+					<span id="rentError" class="print" style="font-size: 36px;"></span>
+					<span id="total_Revenue" class="print"></span>
+					<span id="regular_Monthly_Withhold" class="print"></span>
+					<span id="total_Tax_Dues" class="print"></span>
+					<span id="monthly_Panalty" class="print" style="display: none;" ></span>					
+					<span id="total_Panalties" class="print"></span>
+					<i class="fa fa-info-circle"  id="panalty_Info" onclick= show_Panalty_Details()></i>
+					<span id="interest_Charges" class="print"></span>
+					<span id="total_Withhold" class="print"></span>
+				</div>
+            </div>
+
+        </div>
+
+        <div class="vendor" id="vendor_id" style="display: none;" >
+            <h1>Vendor Tax</h1>
+            <p>As per the Afghan law. Businesses are required to withhold 2% of the invoice value
+            from the vendor/contractor if the total ANNUAL paid amount exceeds 500,000 AFN.</p>
+            
+            <div class="wrap">
+                <div class="input">
+                    <form action="post">
+                        <label for=""> Starting Month</label><br>
+                        <input type="month" name="" id="date4">
+                        <span id="addDateVendor" style="display: none;"> 
+                            <label>Ending Month: </label> <br> 
+                            <input type="month" id="dateEnd4" >
+                        </span>
+                        <input type="checkbox" onclick="addEndDate()" name="" id="checkBOX4"> 
+                        <label for="checkBOX4">Do you want to add End Date? </label><br>
+                        <label for="rent">How much are you paying your vendor/contractor? </label><br>
+                        <input type="number"  id="vendorInput" onkeyup="calculateVendor()" placeholder="Enter amount!">
+						<label for="">
+							Dos your vendor have a business license from ACBR or AISA? 
+							(or is it a consultant / freelancer?)
+						</label><br>
+						<input type="radio" name="license" value="yes" id="opt_yes" onclick="calculateVendor()" >
+						<label for="yes">Yes, they have a valid business license.</label><br>
+						<input type="radio" name="license" id="opt_no" value="no" onchange="calculateVendor()" >
+						<label for="no"> No, they are consultants/freelancers.</label><br>
+                    </form>
+					<script>
+						function calculateVendor(){
+							var payment = document.getElementById("vendorInput").value;
+							tax = 0;
+							var optionYes = document.getElementById("opt_yes").checked;
+							var optionNo = document.getElementById("opt_no").checked;
+							if(payment <= 500000){
+								document.getElementById("vendorOutput").innerHTML = 
+								"NO Tax Applicable on this amount !";
+							}
+							else if(payment > 500000 ){
+								document.getElementById("vendorOutput").innerHTML = 
+								"please select One of the Options available Below input !";
+								if(optionYes == true){
+									tax = payment * 2/100;
+									document.getElementById("vendorOutput").innerHTML = 
+									'You should deduct: <br>' + tax.toLocaleString("en-US") +' AFN';
+								}
+								else if (optionNo == true){
+									tax = payment * 7/100;
+									document.getElementById("vendorOutput").innerHTML = 
+									'You should deduct: <br>' + tax.toLocaleString("en-US") +' AFN';
+								}
+							}
+						}
+					</script>
+                </div>
+                <div class="output"> <span id="vendorOutput" class="print"></span></div>
+            </div>
+        </div>
+
+        <div class="annualIncome" id="annualIncome_id" style="display: none;" >
+            <h1> Annual Income Tax Return </h1>
+            <p>
+                Businesses are required to pay 20% of their annual profit as a tax to the Afghan government. 
+                However, if they are not profitable. They do not have to pay any amount. 
+                Please do include 4% BRT as an expense when calculcating your profits.
+            </p>
+
+            <div class="wrap">
+                <div class="input">
+                    <form action="">
+                        <label for=""> Starting Month</label><br>
+                        <input type="month" name="" id="date5">
+                        <span id="addDateAnnualIncome"style="display: none;"> 
+                            <label>Ending Month: </label> <br> 
+                            <input type="month" id="dateEnd5" >
+						</span>
+                        <input type="checkbox" onclick="addEndDate()" name="" id="checkBOX5"> 
+                        <label for="checkBOX5">Do you want to add End Date? </label><br>
+                        <label for="">What's your total annual revenue?</label><br>
+                        <input type="number" name="" id="annualIncomeInput" onkeyup="annualIncomeTaxCalculator()">
+                        <label for="">What's your total annual expense? </label><br>
+                        <input type="number" name="" id="annualexpenseInput" onkeyup="annualIncomeTaxCalculator()" >
+ 
+                    </form>
+                </div>
+				<script>
+					function annualIncomeTaxCalculator(){
+						var income = document.getElementById('annualIncomeInput').value;
+						var expense = document.getElementById('annualexpenseInput').value;
+						let profit = income - expense; 
+						tax = 0;
+						if(income < expense){
+							document.getElementById('profitOutput').innerHTML = 
+							'Your loss is: ' + profit.toLocaleString("en-US") +' AFN';
+							document.getElementById('incomeTaxOutput').innerHTML =
+							'You do not have to pay any tax!';
+						}
+						else if(income > expense){
+							tax = profit * 20/100;
+							document.getElementById('profitOutput').innerHTML = 
+							'Your Profit is: ' + profit.toLocaleString("en-US") + ' AFN';
+							document.getElementById('incomeTaxOutput').innerHTML =
+							'you have to pay: ' + tax.toLocaleString("en-US") + ' AFN'; 
+						}
+						else{
+							document.getElementById('profitOutput').innerHTML = 
+							'You Do not have any Loss or Profit';
+							document.getElementById('incomeTaxOutput').innerHTML =
+							'You do not have to pay any tax!';
+						}
+
+					}
+				</script>
+                <div class="output">
+					<span id="profitOutput" class="print"> </span> <br>
+					<span id="incomeTaxOutput" class="print"> </span><br>
+                </div>
+            </div>
+
+        </div>
+        <p><b>Disclaimer:</b> While we have been diligent in attempting to provide accurate estimates, 
+            the accuracy of the information cannot be guaranteed. Afghans laws and regulations change frequently, 
+            and are subject to differing legal interpretations. 
+            Please get in contact with us if you want us to manage your taxes and compliance work. 
+        </p>
+
+    </div>
+
+    <footer>
+        <h3>Page Designed by: ShuKoor Nasih </h3>
+        <p>Find me on social media.</p>
+        <a href="https://www.facebook.com/profile.php?id=100008108955733" target="_blank">
+            <i class="fa fa-facebook-official">  </i>
+        </a> &ensp;
+        <a href="https://www.linkedin.com/in/abdul-shukoor-nasih-210056218" target="_blank">
+            <i class="fa fa-linkedin "></i> 
+        </a> &ensp;
+        <a href="https://twitter.com/Shukoornasih?s=08" target="_blank">
+            <i class="fa fa-twitter "></i>
+        </a> &ensp;
+        <a href="https://instagram.com/shukoornasih?utm_medium=copy_link" target="_blank">
+            <i class="fa fa-instagram "></i></a> &ensp;
+        <a href="mailto:shukoornasih@gmil.com"><i class="fa fa-envelope "></i> 
+        </a> &ensp;
+        <a href="tel:+93786843521" target="_blank"><i class="fa fa-phone "></i></a>
+        
+    </footer>
+    
+</body>
+</html>
